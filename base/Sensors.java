@@ -20,7 +20,7 @@ public class Sensors {
         xy_summ = 0; xz_summ = 0; zy_summ = 0; count = 0;
     }
 
-    public void sensorChanged(SensorEvent event){
+    public void checkSensors(SensorEvent event){
 
         loadSensorData(event);
 
@@ -29,8 +29,8 @@ public class Sensors {
 
 
         xy_summ += (int) Math.round(Math.toDegrees(orientation[0]));
-        xz_summ += (int) Math.round(Math.toDegrees(orientation[1]));
-        zy_summ += (int) Math.round(Math.toDegrees(orientation[2]));
+        zy_summ += (int) Math.round(Math.toDegrees(orientation[1]));
+        xz_summ += (int) Math.round(Math.toDegrees(orientation[2]));
         count += 1;
 
         if(count >= calibrate_count){
