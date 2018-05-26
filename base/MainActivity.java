@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-    MathModel model = new MathModel(100, 100, 100);
+    MathModel model = new MathModel();
+    //model.addPlane(I(0), (double)0, (double)100);
     Sensors sensors = new Sensors();
 
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 
 
-
+        model.addPlane(0,0,100);
 
 
         setContentView(R.layout.activity_main);
@@ -37,10 +38,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        sensors.sensorChanged(event);
+        sensors.checkSensors(event);
 
         if(sensors.haveNewInfo()){
-            TextView text;text = (TextView) findViewById(R.id.text);text.setText(sensors.getString());
+            TextView text;text = (TextView) findViewById(R.id.text);
+            String output = model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()) + '\n' + sensors.getString();
+            text.setText(output);
         }
 
 
