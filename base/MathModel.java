@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class MathModel {
 
+    final int camera_x_angle = 30;
+    final int camera_y_angle = 30;
+
     private ArrayList <plane> planes = new ArrayList<plane>();
 
 //    MathModel(double x_plane, double y_plane, double z_plane){
@@ -19,12 +22,28 @@ public class MathModel {
         planes.add(new plane(x,y,z));
     }
 
-    public String check(int xy_angle, int xz_angle, int zy_angle){
+    public void check(int xy_angle, int xz_angle, int zy_angle){
         planes.get(0).updatePosition();
         planes.get(0).turnSystem(xy_angle, xz_angle, zy_angle);
+        planes.get(0).getOnScreen();
+    }
+
+    public double percentX(){
+        return planes.get(0).percent_x;
+    }
+    public double percentY(){
+        return planes.get(0).percent_y;
+    }
+    public boolean isOnScreen(){
+        return planes.get(0).isOnScreen;
+    }
+
+    public double len(){
+        return planes.get(0).len();
+    }
+
+    public String getString(){
         return planes.get(0).getString();
-
-
     }
 
 
@@ -43,9 +62,18 @@ public class MathModel {
         private double x, y, z;
         private double x_absolute, y_absolute, z_absolute;
 
+        private boolean isOnScreen;
+        private double percent_x, percent_y;
+
         plane(double x, double y, double z){
             this.x_absolute = x; this.y_absolute = y; this.z_absolute = z;
         }
+
+
+        public double len(){
+            return Math.sqrt(x*x + y*y + z*z);
+        }
+
 
         public void updatePosition(){
             //speed and other.....
@@ -76,6 +104,38 @@ public class MathModel {
 //            this.y = x * Math.sin(xy_angle) + y *  Math.cos(xy_angle)+ z * 0;
 //            this.z = x * 0 + y * 0 + z * 1;
 //        }
+
+        private void getOnScreen(){
+
+            double a, b, x_min, x_max, y_min, y_max;
+
+            a = 2 * z * Math.tan(camera_x_angle / 2);
+            b = 2 * z * Math.tan(camera_y_angle / 2);
+
+            x_min = (-1) * a / 2;
+            x_max = a / 2;
+            y_min = (-1) * b / 2;
+            y_max = b / 2;
+
+            if(x_min <= x && x <= x_max && y_min <= y && y <= y_max){
+                isOnScreen = true;
+                percent_x = (x - x_min) / a;
+                percent_y = (y - y_min) / b;
+            }
+            else{
+                isOnScreen = false;
+            }
+        }
+
+        public double percentX(){
+            return percent_x;
+        }
+        public double percentY(){
+            return percent_y;
+        }
+        public boolean isOnScreen(){
+            return isOnScreen;
+        }
 
         public void turnSystem(int xy_angle, int xz_angle, int zy_angle){
             xy_angle *= (-1); xz_angle *= (-1); zy_angle *= (-1);
@@ -110,6 +170,7 @@ public class MathModel {
             main_matrix = matrix_multiplication(x_matrix, main_matrix);
             main_matrix = matrix_multiplication(y_matrix, main_matrix);
             main_matrix = matrix_multiplication(z_matrix, main_matrix);
+
 
             x = Math.round(main_matrix[0][0]);
             y = Math.round(main_matrix[1][0]);
@@ -161,3 +222,4 @@ public class MathModel {
     }
 
 }
+
