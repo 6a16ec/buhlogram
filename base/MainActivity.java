@@ -38,12 +38,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        sensors.checkSensors(event);
+        sensors.checkSensors(event);//!!
 
         if(sensors.haveNewInfo()){
+
             TextView text;text = (TextView) findViewById(R.id.text);
-            String output = model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()) + '\n' + sensors.getString();
+            String output = model.getString();
+            output += '\n' + sensors.getString();
+            output += " ==== " + model.len();
             text.setText(output);
+
+            model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()); //!!
+
+            /*
+            model.isOnScreen();
+            model.percentX();
+            model.percentY();
+            */
+
         }
 
 
@@ -73,4 +85,3 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 }
-
