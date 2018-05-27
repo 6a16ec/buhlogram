@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 
 
-        model.addPlane(0,0,100);
+        model.addPlane("# # 0 0 90 100 300 # # A320 # # MSK NN # # # # # LOL", 0 , 0 , 0 );
 
 
         setContentView(R.layout.activity_main);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             TextView text;text = (TextView) findViewById(R.id.text);
             String output = model.getString(0);
             output += '\n' + sensors.getString();
-            output += " ==== " + model.len(0) + "\n   ";
+            output += " ==== " + model.distance(0) + "\n   ";
             output += String.valueOf(model.isOnScreen(0)) + " " + String.valueOf(model.percentX(0)) + " " + model.percentY(0);
 
             String tcp_text = "";
