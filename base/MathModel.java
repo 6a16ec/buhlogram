@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class MathModel {
 
-    final int camera_x_angle = 30;
-    final int camera_y_angle = 30;
+    final int camera_x_angle = 80;
+    final int camera_y_angle = 80;
 
     private ArrayList <plane> planes = new ArrayList<plane>();
 
@@ -13,8 +13,10 @@ public class MathModel {
 //        plane = new plane(x_plane, y_plane, z_plane);
 //    }
     public MathModel(){
-
+        TCP tcp = new TCP();
     }
+
+
 
 
 
@@ -71,11 +73,12 @@ public class MathModel {
 
 
         public double len(){
-            return Math.sqrt(x*x + y*y + z*z);
+            return Math.sqrt(Math.pow(x_absolute, 2) + Math.pow(y_absolute, 2) + Math.pow(z_absolute, 2));
         }
 
 
         public void updatePosition(){
+            //
             //speed and other.....
             // change x_absolute and other...
         }
@@ -139,25 +142,32 @@ public class MathModel {
 
         public void turnSystem(int xy_angle, int xz_angle, int zy_angle){
             xy_angle *= (-1); xz_angle *= (-1); zy_angle *= (-1);
+            
+            double xy_angle_radian, xz_angle_radian, zy_angle_radian;
+            
+            xy_angle_radian = (double) xy_angle / 180 * Math.PI;
+            xz_angle_radian = (double) xz_angle / 180 * Math.PI;
+            zy_angle_radian = (double) zy_angle / 180 * Math.PI;
+            
 
             // turn around X
             double[][] x_matrix =  new double[][]{
                     {1, 0, 0},
-                    {0, Math.cos(zy_angle), (-1) * Math.sin(zy_angle)},
-                    {0, Math.sin(zy_angle), Math.cos(zy_angle)}
+                    {0, Math.cos(zy_angle_radian), (-1) * Math.sin(zy_angle_radian)},
+                    {0, Math.sin(zy_angle_radian), Math.cos(zy_angle_radian)}
             };
 
             // turn around Y
             double[][] y_matrix =  new double[][]{
-                    {Math.cos(xz_angle), 0, Math.sin(xz_angle)},
+                    {Math.cos(xz_angle_radian), 0, Math.sin(xz_angle_radian)},
                     {0, 1, 0},
-                    {(-1) * Math.sin(xz_angle), 0, Math.cos(xz_angle)}
+                    {(-1) * Math.sin(xz_angle_radian), 0, Math.cos(xz_angle_radian)}
             };
 
             // turn around Z
             double[][] z_matrix =  new double[][]{
-                    {Math.cos(xy_angle), (-1) * Math.sin(xy_angle), 0},
-                    {Math.sin(xy_angle), Math.cos(xy_angle), 0},
+                    {Math.cos(xy_angle_radian), (-1) * Math.sin(xy_angle_radian), 0},
+                    {Math.sin(xy_angle_radian), Math.cos(xy_angle_radian), 0},
                     {0, 0, 1}
             };
 
@@ -167,14 +177,28 @@ public class MathModel {
                     {z_absolute}
             };
 
+//            double len = len();
+//            // turn around X
+//            double angle =  Math.acos(y_absolute / len);
+//            angle += (zy_angle / 180 * Math.PI);
+//
+////            x =  Math.atan(1);
+//            z = (int) (len * Math.sin(angle));
+//            y = (int) (len * Math.cos(angle));
+
+
+
             main_matrix = matrix_multiplication(x_matrix, main_matrix);
             main_matrix = matrix_multiplication(y_matrix, main_matrix);
             main_matrix = matrix_multiplication(z_matrix, main_matrix);
-
+//
 
             x = Math.round(main_matrix[0][0]);
             y = Math.round(main_matrix[1][0]);
             z = Math.round(main_matrix[2][0]);
+//            x =  (double)((int) (x_matrix[1][1] * 100)) / 100;
+//            y =  (double)((int) (x_matrix[1][2] * 100)) / 100;
+//            z =  (double)((int) (x_matrix[2][1] * 100)) / 100;
 
         }
 
