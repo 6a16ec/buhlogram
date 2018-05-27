@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             TextView text;text = (TextView) findViewById(R.id.text);
             String output = model.getString();
             output += '\n' + sensors.getString();
-            output += " ==== " + model.len();
+            output += " ==== " + model.len() + "\n   ";
+            output += String.valueOf(model.isOnScreen()) + " " + String.valueOf(model.percentX()) + " " + model.percentY();
             text.setText(output);
 
             model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()); //!!
@@ -85,3 +86,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 }
+
