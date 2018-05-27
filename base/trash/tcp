@@ -1,0 +1,19 @@
+class TCP{
+
+    public double coordinate1, coordinate2;
+    public int angle, height, speed, time;
+    public String model, airoport_from, airoport_to, company;
+
+    public void parse(String string){
+        String data[] = string.split(" ");
+        coordinate1 = Double.parseDouble(data[2]);
+        coordinate2 = Double.parseDouble(data[3]);
+        angle = Integer.parseInt(data[4]);
+        height = Integer.parseInt(data[5]);
+        speed = Integer.parseInt(data[6]);
+        model = data[9];
+        airoport_from = data[12];
+        airoport_to = data[13];
+        company = data[19];
+    }
+}
