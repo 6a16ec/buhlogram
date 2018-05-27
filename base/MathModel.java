@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class MathModel {
 
-    final int camera_x_angle = 80;
-    final int camera_y_angle = 80;
+    final int camera_x_angle = 50;
+    final int camera_y_angle = 50;
 
     private ArrayList <plane> planes = new ArrayList<plane>();
 
-//    MathModel(double x_plane, double y_plane, double z_plane){
+    //    MathModel(double x_plane, double y_plane, double z_plane){
 //        plane = new plane(x_plane, y_plane, z_plane);
 //    }
-    public MathModel(){
-        TCP tcp = new TCP();
-    }
+//    public MathModel(){
+//        TCP tcp = new TCP();
+//    }
 
 
 
@@ -49,15 +49,6 @@ public class MathModel {
     }
 
 
-//    public String checkPlane(int xy_angle, int xz_angle, int zy_angle){
-//        plane.updatePosition();
-//        plane.turnSystem(xy_angle, xz_angle, zy_angle);
-//        double[] coordinates = plane.position();
-//
-//        return Double.toString(coordinates[0]) + " " + Double.toString(coordinates[1]) + " " + Double.toString(coordinates[2]);
-//
-//
-//    }
 
     private class plane{
 
@@ -112,8 +103,13 @@ public class MathModel {
 
             double a, b, x_min, x_max, y_min, y_max;
 
-            a = 2 * z * Math.tan(camera_x_angle / 2);
-            b = 2 * z * Math.tan(camera_y_angle / 2);
+            if(z <= 0){
+                isOnScreen = false;
+                return;
+            }
+
+            a = 2 * z * Math.tan(Math.toRadians(camera_x_angle / 2));
+            b = 2 * z * Math.tan(Math.toRadians(camera_y_angle / 2));
 
             x_min = (-1) * a / 2;
             x_max = a / 2;
@@ -141,14 +137,19 @@ public class MathModel {
         }
 
         public void turnSystem(int xy_angle, int xz_angle, int zy_angle){
-            xy_angle *= (-1); xz_angle *= (-1); zy_angle *= (-1);
-            
+            xy_angle *= (-1);
+            xz_angle *= (-1);
+            zy_angle *= (-1);
+
             double xy_angle_radian, xz_angle_radian, zy_angle_radian;
-            
+
+
             xy_angle_radian = (double) xy_angle / 180 * Math.PI;
             xz_angle_radian = (double) xz_angle / 180 * Math.PI;
             zy_angle_radian = (double) zy_angle / 180 * Math.PI;
-            
+
+//            xz_angle_radian += Math.PI;
+
 
             // turn around X
             double[][] x_matrix =  new double[][]{
@@ -188,14 +189,21 @@ public class MathModel {
 
 
 
-            main_matrix = matrix_multiplication(x_matrix, main_matrix);
-            main_matrix = matrix_multiplication(y_matrix, main_matrix);
-            main_matrix = matrix_multiplication(z_matrix, main_matrix);
-//
+            main_matrix = matrix_multiplication_second(x_matrix, main_matrix);
+            main_matrix = matrix_multiplication_second(y_matrix, main_matrix);
+            main_matrix = matrix_multiplication_second(z_matrix, main_matrix);
+
+//            double[][] result;
+//            result = matrix_multiplication(x_matrix, y_matrix);
+//            result = matrix_multiplication(result, z_matrix);
+//            main_matrix = matrix_multiplication(result, main_matrix);
 
             x = Math.round(main_matrix[0][0]);
             y = Math.round(main_matrix[1][0]);
             z = Math.round(main_matrix[2][0]);
+
+
+
 //            x =  (double)((int) (x_matrix[1][1] * 100)) / 100;
 //            y =  (double)((int) (x_matrix[1][2] * 100)) / 100;
 //            z =  (double)((int) (x_matrix[2][1] * 100)) / 100;
@@ -240,6 +248,16 @@ public class MathModel {
                     }
                 }
             }
+
+            return result;
+        }
+
+        private double[][] matrix_multiplication_second(double[][] first, double second[][]) {
+
+            double[][] result = new double[3][1];
+            result[0][0] = first[0][0] * second[0][0] + first[0][1] * second[1][0] + first[0][2] * second[2][0];
+            result[1][0] = first[1][0] * second[0][0] + first[1][1] * second[1][0] + first[1][2] * second[2][0];
+            result[2][0] = first[2][0] * second[0][0] + first[2][1] * second[1][0] + first[2][2] * second[2][0];
 
             return result;
         }
