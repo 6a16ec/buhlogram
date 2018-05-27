@@ -8,7 +8,7 @@ public class Sensors {
 
     private int xy, xz, zy;
     private int xy_summ, xz_summ, zy_summ, count;
-    final private int calibrate_count = 1; // !!!!!
+    final private int calibrate_count = 3; // !!!!!
 
     private float[] rotationMatrix = new float[16]; //матрица поворота
 
@@ -30,7 +30,7 @@ public class Sensors {
 
         xy_summ += (int) Math.round(Math.toDegrees(orientation[0]));
         zy_summ += (int) Math.round(Math.toDegrees(orientation[1]));
-        xz_summ += (int) Math.round(Math.toDegrees(orientation[2]));
+        xz_summ += (int) (Math.round(Math.toDegrees(orientation[2])) + Math.toDegrees(Math.PI)) % 360;
         count += 1;
 
         if(count >= calibrate_count){
