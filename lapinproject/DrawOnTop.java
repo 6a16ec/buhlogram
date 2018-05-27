@@ -14,6 +14,7 @@ public class DrawOnTop extends View {
 
     double x = 0;
     double y = 0;
+    boolean beDrawn = false;
 
     public DrawOnTop(Context context) {
         super(context);
@@ -21,8 +22,9 @@ public class DrawOnTop extends View {
     }
 
     public void setPercentCoordinate(double width, double height){
-        x = getWidth() * width / 100;
-        y = getHeight() *height / 100;
+        x = getWidth() * width ;
+        y = getHeight() * height;
+        beDrawn = true;
     }
 
     @Override
@@ -33,8 +35,10 @@ public class DrawOnTop extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
         paint.setTextSize(50);
-
-        canvas.drawCircle((float)x, (float)y, 30, paint);
+        if(beDrawn) {
+            canvas.drawCircle((float) x, (float) y, 30, paint);
+            beDrawn = false;
+        }
 
         super.onDraw(canvas);
     }
