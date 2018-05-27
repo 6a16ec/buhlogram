@@ -25,28 +25,53 @@ public class MathModel {
     }
 
     public void check(int xy_angle, int xz_angle, int zy_angle){
-        planes.get(0).updatePosition();
-        planes.get(0).turnSystem(xy_angle, xz_angle, zy_angle);
-        planes.get(0).getOnScreen();
+        int amount = amount();
+        for(int i = 0; i < amount; i++){
+            planes.get(i).updatePosition();
+            planes.get(i).turnSystem(xy_angle, xz_angle, zy_angle);
+            planes.get(i).getOnScreen();
+        }
     }
 
-    public double percentX(){
-        return planes.get(0).percent_x;
+    public double percentX(int i){
+        return planes.get(i).percent_x;
     }
-    public double percentY(){
-        return planes.get(0).percent_y;
+    public double percentY(int i){
+        return planes.get(i).percent_y;
     }
-    public boolean isOnScreen(){
-        return planes.get(0).isOnScreen;
+    public boolean isOnScreen(int i){
+        return planes.get(i).isOnScreen;
+    }
+    public int amount(){
+        return planes.size();
     }
 
-    public double len(){
-        return planes.get(0).len();
+    public double len(int i){
+        return planes.get(i).len();
     }
 
-    public String getString(){
-        return planes.get(0).getString();
+    public String getString(int i){
+        return planes.get(i).getString();
     }
+
+    public String model(int i){
+        return planes.get(i).model;
+    }
+
+    public String airoport_from(int i){
+        return planes.get(i).airoport_from;
+    }
+
+    public String airoport_to(int i){
+        return planes.get(i).airoport_to;
+    }
+
+    public String company(int i){
+        return planes.get(i).company;
+    }
+
+
+
 
 
 
@@ -57,6 +82,23 @@ public class MathModel {
 
         private boolean isOnScreen;
         private double percent_x, percent_y;
+
+        public double coordinate1, coordinate2;
+        public int angle, height, speed, time;
+        public String model, airoport_from, airoport_to, company;
+
+        public void parse(String string){
+            String data[] = string.split(" ");
+            coordinate1 = Double.parseDouble(data[2]);
+            coordinate2 = Double.parseDouble(data[3]);
+            angle = Integer.parseInt(data[4]);
+            height = Integer.parseInt(data[5]);
+            speed = Integer.parseInt(data[6]);
+            model = data[9];
+            airoport_from = data[12];
+            airoport_to = data[13];
+            company = data[19];
+        }
 
         plane(double x, double y, double z){
             this.x_absolute = x; this.y_absolute = y; this.z_absolute = z;
