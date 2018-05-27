@@ -24,6 +24,10 @@ public class MathModel {
         planes.add(new plane(x,y,z));
     }
 
+    public void addPlane(String string, double my_coordinate1, double my_coordinate2, double my_height){
+        planes.add(new plane(string, my_coordinate1, my_coordinate2, my_height));
+    }
+
     public void check(int xy_angle, int xz_angle, int zy_angle){
         int amount = amount();
         for(int i = 0; i < amount; i++){
@@ -46,8 +50,8 @@ public class MathModel {
         return planes.size();
     }
 
-    public double len(int i){
-        return planes.get(i).len();
+    public double distance(int i){
+        return planes.get(i).distance();
     }
 
     public String getString(int i){
@@ -104,8 +108,17 @@ public class MathModel {
             this.x_absolute = x; this.y_absolute = y; this.z_absolute = z;
         }
 
+        plane(String string, double my_coordinate1, double my_coordinate2, double my_height){
+            parse(string);
+            z_absolute = height - my_height;
+            x_absolute = coordinate1 - my_coordinate1;
+            x_absolute *= 111000;
+            y_absolute = coordinate2 - my_coordinate2;
+            y_absolute *= 111000;
+        }
 
-        public double len(){
+
+        public double distance(){
             return Math.sqrt(Math.pow(x_absolute, 2) + Math.pow(y_absolute, 2) + Math.pow(z_absolute, 2));
         }
 
@@ -220,14 +233,14 @@ public class MathModel {
                     {z_absolute}
             };
 
-//            double len = len();
+//            double distance = distance();
 //            // turn around X
-//            double angle =  Math.acos(y_absolute / len);
+//            double angle =  Math.acos(y_absolute / distance);
 //            angle += (zy_angle / 180 * Math.PI);
 //
 ////            x =  Math.atan(1);
-//            z = (int) (len * Math.sin(angle));
-//            y = (int) (len * Math.cos(angle));
+//            z = (int) (distance * Math.sin(angle));
+//            y = (int) (distance * Math.cos(angle));
 
 
 
