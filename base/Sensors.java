@@ -8,7 +8,7 @@ public class Sensors {
 
     private int xy, xz, zy;
     private int xy_summ, xz_summ, zy_summ, count;
-    final private int calibrate_count = 5; // !!!!!
+    final private int calibrate_count = 1; // !!!!!
 
     private float[] rotationMatrix = new float[16]; //матрица поворота
 
@@ -61,8 +61,8 @@ public class Sensors {
         String xy_string, xz_string, zy_string;
 
         xy_string = String.valueOf(xy);
-        xz_string = String.valueOf(xz);
-        zy_string = String.valueOf(zy);
+        xz_string = String.valueOf(zy);
+        zy_string = String.valueOf(xz);
 
         return xy_string + " " + xz_string + " " + zy_string;
     }
