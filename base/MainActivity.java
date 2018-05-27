@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
     private SensorManager sensorManager; //менеджер сенсоров
 
@@ -17,6 +19,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     MathModel model = new MathModel();
     //model.addPlane(I(0), (double)0, (double)100);
     Sensors sensors = new Sensors();
+
+    TCP tcp = new TCP();
+
 
 
     public MainActivity() {
@@ -42,11 +47,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if(sensors.haveNewInfo()){
 
+//            try {
+//                tcp.write("1223");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
             TextView text;text = (TextView) findViewById(R.id.text);
-            String output = model.getString();
+            String output = model.getString(0);
             output += '\n' + sensors.getString();
-            output += " ==== " + model.len() + "\n   ";
-            output += String.valueOf(model.isOnScreen()) + " " + String.valueOf(model.percentX()) + " " + model.percentY();
+            output += " ==== " + model.len(0) + "\n   ";
+            output += String.valueOf(model.isOnScreen(0)) + " " + String.valueOf(model.percentX(0)) + " " + model.percentY(0);
+
+            String tcp_text = "";
+//            try {
+//                tcp_text = tcp.read();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            output += "\n" + tcp_text;
+
             text.setText(output);
 
             model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()); //!!
