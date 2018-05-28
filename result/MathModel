@@ -51,10 +51,6 @@ public class MathModel {
         return planes.size();
     }
 
-    public double distance(int i){
-        return planes.get(i).distance();
-    }
-
     public String getString(int i){
         return planes.get(i).getString();
     }
