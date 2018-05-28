@@ -98,7 +98,7 @@ public class MathModel {
 
         public double coordinate1, coordinate2;
         public int angle, height, speed, time;
-        public String model, airoport_from, airoport_to, company;
+        public String model, airoport_from, airoport_to, company, id;
 
         public void parse(String string){
             String data[] = string.split(" ");
