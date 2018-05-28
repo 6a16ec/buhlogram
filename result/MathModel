@@ -74,6 +74,18 @@ public class MathModel {
     public String company(int i){
         return planes.get(i).company;
     }
+    
+    public int speed(int i){
+        return planes.get(i).speed;
+    }
+
+    public double height(int i){
+        return planes.get(i).height;
+    }
+
+    public double distance(int i){
+        return planes.get(i).distance();
+    }
 
 
 
