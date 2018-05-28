@@ -1,6 +1,7 @@
 package com.example.user.myapplication;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MathModel {
 
@@ -124,35 +125,20 @@ public class MathModel {
 
 
         public void updatePosition(){
-            //
-            //speed and other.....
-            // change x_absolute and other...
+
+            double distance = speed * (unixtime() - time);
+            x_absolute += Math.cos(Math.toRadians(angle)) * distance;
+            y_absolute += Math.sin(Math.toRadians(angle)) * distance;
         }
 
-//        public void turnSystem(int xy_angle, int xz_angle, int zy_angle){
-//
-//            xy_angle *= (-1); xz_angle *= (-1); zy_angle *= (-1);
-//
-//            double x, y, z;
-//
-//            // turn around X
-//            x = this.x; y = this.y; z = this.z;
-//            this.x = x * 1 + y * 0 + z * 0;
-//            this.y = x * 0 + y *  Math.cos(zy_angle)+ z * Math.sin(zy_angle);
-//            this.z = x * 0 + y * Math.sin(zy_angle) + z * Math.cos(zy_angle);
-//
-//            // turn around Y
-//            x = this.x; y = this.y; z = this.z;
-//            this.x = x * Math.cos(xz_angle) + y * 0 + z * Math.sin(xz_angle);
-//            this.y = x * 0 + y * 1 + z * 0;
-//            this.z = (-1) * x * Math.sin(xz_angle) + y * 0 + z * Math.cos(xz_angle);
-//
-//            // turn around Z
-//            x = this.x; y = this.y; z = this.z;
-//            this.x = x * Math.cos(xy_angle) - y * Math.sin(xy_angle) + z * 0;
-//            this.y = x * Math.sin(xy_angle) + y *  Math.cos(xy_angle)+ z * 0;
-//            this.z = x * 0 + y * 0 + z * 1;
-//        }
+        private int unixtime(){
+            Date now = new Date();
+            Long longTime = new Long(now.getTime()/1000);
+            return longTime.intValue();
+        }
+
+
+
 
         private void getOnScreen(){
 
@@ -244,9 +230,13 @@ public class MathModel {
 
 
 
-            main_matrix = matrix_multiplication_second(x_matrix, main_matrix);
-            main_matrix = matrix_multiplication_second(y_matrix, main_matrix);
-            main_matrix = matrix_multiplication_second(z_matrix, main_matrix);
+            main_matrix = matrix_multiplication(x_matrix, main_matrix);
+            main_matrix = matrix_multiplication(y_matrix, main_matrix);
+            main_matrix = matrix_multiplication(z_matrix, main_matrix);
+
+//            main_matrix = matrix_multiplication_second(x_matrix, main_matrix);
+//            main_matrix = matrix_multiplication_second(y_matrix, main_matrix);
+//            main_matrix = matrix_multiplication_second(z_matrix, main_matrix);
 
 //            double[][] result;
 //            result = matrix_multiplication(x_matrix, y_matrix);
@@ -265,16 +255,6 @@ public class MathModel {
 
         }
 
-        double[] position(){
-
-            double[] coordinates = new double[3];
-
-            coordinates[0] = this.x;
-            coordinates[1] = this.y;
-            coordinates[2] = this.z;
-
-            return coordinates;
-        }
 
         public String getString(){
 
