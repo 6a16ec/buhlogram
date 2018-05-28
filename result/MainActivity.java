@@ -1,4 +1,4 @@
-package com.example.user.lapin;
+package com.flappy.user.finalbeta;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             mDraw.planes = new ArrayList<Plane>();
             for(int i=0;i<model.amount();i++)
                 if(model.isOnScreen(i))
-                    mDraw.planes.add(new Plane(model.percentX(i) * mDraw.getWidth(),model.percentY(i)*mDraw.getHeight(),model.model(i),model.airoport_from(i),model.airoport_to(i),model.company(i),true));
+                    mDraw.planes.add(new Plane(model.percentX(i) * mDraw.getWidth(),model.percentY(i)*mDraw.getHeight(),model.model(i),model.airoport_from(i),model.airoport_to(i),model.company(i),model.speed(i),model.height(i),model.distance(i)));
             //!!!!!!if(model.isOnScreen())
             //!!!!!!!!mDraw.setPercentCoordinate(model.percentX(),model.percentY());
 //            mDraw.planes.add(new Plane(0.4 * mDraw.getWidth(),0.3*mDraw.getHeight(),"srakotan","zhopa","pizda","hui",true));
@@ -158,5 +158,5 @@ public class MainActivity extends Activity implements SensorEventListener {
     };
 
 
- 
+
 }

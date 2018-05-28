@@ -1,4 +1,4 @@
-package com.example.user.lapin;
+package com.flappy.user.finalbeta;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -68,16 +68,16 @@ public class DrawOnTop extends View {
         protected Bitmap foninfo;
 
         UsualScreen(){
-            plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane);
-            plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
-            foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
-            foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
+        plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane);
+        plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
+        foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
+        foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
         }
 
         void performClick(float xScreen, float yScreen) {
             for(int i=0;i<planes.size();i++)
                 if((planes.get(i).percentX- plane.getWidth()/2)<xScreen && xScreen < (planes.get(i).percentX + plane.getWidth()/2) && (planes.get(i).percentY- plane.getHeight()/2)<yScreen && yScreen <(planes.get(i).percentY + plane.getHeight()/2)){
-                    u = new PlaneInfo(i);
+                u = new PlaneInfo(i);
                 }
         }
 
@@ -125,19 +125,26 @@ public class DrawOnTop extends View {
             textPaint.setColor(Color.WHITE);
 
             int width = getWidth()/2;
-            int height = (getHeight()-foninfo.getHeight())/2+ 110;
+            int height = (getHeight()-foninfo.getHeight())/2+ 40;
 
 
             int xPos = (width);
             int yPos = (int) ((height) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
 
             canvas.drawText("company: "+planes.get(i).company, xPos, yPos, textPaint);
-            yPos+=60;
+            yPos+=50;
             canvas.drawText("airport from: "+planes.get(i).airport_from, xPos, yPos, textPaint);
-            yPos+=60;
+            yPos+=50;
             canvas.drawText("airport to: "+planes.get(i).airport_to, xPos, yPos, textPaint);
-            yPos+=60;
+            yPos+=50;
             canvas.drawText("model: "+planes.get(i).model, xPos, yPos, textPaint);
+            yPos+=50;
+            canvas.drawText("speed: "+ planes.get(i).speed,xPos,yPos,textPaint);
+            yPos+=50;
+            canvas.drawText("height: "+ planes.get(i).height,xPos,yPos,textPaint);
+            yPos+=50;
+            canvas.drawText("distance: "+ planes.get(i).distance,xPos,yPos,textPaint);
+
 
 
         }
@@ -155,15 +162,19 @@ class Plane{
     String airport_from;
     String airport_to;
     String company;
-    boolean beDrawn;
-    Plane(double percentX,double percentY,String model,String airport_from,String airport_to,String company,boolean beDrawn){
+    int speed;
+    double height;
+    double distance;
+    Plane(double percentX,double percentY,String model,String airport_from,String airport_to,String company, int speed, double height,double distance){
         this.percentX = percentX ;
         this.percentY = percentY;
         this.model = model;
         this.airport_from = airport_from;
         this.airport_to=airport_to;
         this.company = company;
-        this.beDrawn = beDrawn;
+        this.speed = speed;
+        this.height = height;
+        this.distance = distance;
     }
 
 }
