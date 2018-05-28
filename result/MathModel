@@ -102,6 +102,7 @@ public class MathModel {
 
         public void parse(String string){
             String data[] = string.split(" ");
+            id = data[0];
             coordinate1 = Double.parseDouble(data[2]);
             coordinate2 = Double.parseDouble(data[3]);
             angle = Integer.parseInt(data[4]);
