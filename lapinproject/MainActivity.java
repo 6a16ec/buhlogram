@@ -10,9 +10,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -111,10 +114,16 @@ public class MainActivity extends Activity implements SensorEventListener {
         if(sensors.haveNewInfo()){
 
             model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY());
-
-            if(model.isOnScreen())
-                mDraw.setPercentCoordinate(model.percentX(),model.percentY());
+            mDraw.planes = new ArrayList<Plane>();
+            /*for(int i=0;i<model.amount();i++)
+                if(model.isOnScreen(i))
+                    mDraw.planes.add(new Plane(model.percentX(i) * mDraw.getWidth(),model.percentY(i)*mDraw.getHeight(),model.model(i),model.airoport_from(i),model.airoport_to(i),model.company(i),true));*/
+            //!!!!!!if(model.isOnScreen())
+                //!!!!!!!!mDraw.setPercentCoordinate(model.percentX(),model.percentY());
+            mDraw.planes.add(new Plane(0.4 * mDraw.getWidth(),0.3*mDraw.getHeight(),"srakotan","zhopa","pizda","hui",true));
+            mDraw.planes.add(new Plane(0.8* mDraw.getWidth(),0.1*mDraw.getHeight(),"ebat","sosat","her","dildak",true));
             mDraw.invalidate();
+
         }
 
 
