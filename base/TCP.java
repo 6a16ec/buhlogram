@@ -13,6 +13,7 @@ public class TCP extends Thread
         try
         {
             Socket socket = new Socket(InetAddress.getByName("phisika.tk").getHostAddress(), 777);
+//            Socket socket = new Socket("82.208.126.185", 777);
             this.socket = socket;
             error = false;
         }
