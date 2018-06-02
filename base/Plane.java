@@ -126,11 +126,11 @@ public class Plane{
         return y_percent;
     }
 
-    public void setX_percent(int x_percent) {
+    public void setX_percent(double x_percent) {
         this.x_percent = x_percent;
     }
 
-    public void setY_percent(int y_percent) {
+    public void setY_percent(double y_percent) {
         this.y_percent = y_percent;
     }
 }
