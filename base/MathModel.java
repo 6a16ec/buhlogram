@@ -51,6 +51,10 @@ public class MathModel {
         return planes.size();
     }
 
+    public Plane plane(int i){
+        return planes.get(i);
+    }
+
 
 
 
@@ -80,7 +84,7 @@ public class MathModel {
         
         double x = plane.getX(), y = plane.getY(), z = plane.getZ();
 
-        int percent_x = 0, percent_y = 0;
+        double percent_x = 0, percent_y = 0;
         boolean isOnScreen;
 
 
@@ -96,8 +100,8 @@ public class MathModel {
 
             if(x_min <= x && x <= x_max && y_min <= y && y <= y_max){
                 isOnScreen = true;
-                percent_x = (int) ((x - x_min) / a);
-                percent_y = (int) ((y - y_min) / b);
+                percent_x = ((x - x_min) / a);
+                percent_y = ((y - y_min) / b);
             }
             else{
                 isOnScreen = false;
