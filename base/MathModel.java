@@ -1,4 +1,4 @@
-package com.example.user.myapplication;
+package com.example.user.lapin;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +8,7 @@ public class MathModel {
     final int camera_x_angle = 50;
     final int camera_y_angle = 50;
 
-    private ArrayList <plane> planes = new ArrayList<plane>();
+    private ArrayList <Plane> planes = new ArrayList<Plane>();
 
     //    MathModel(double x_plane, double y_plane, double z_plane){
 //        plane = new plane(x_plane, y_plane, z_plane);
@@ -22,133 +22,70 @@ public class MathModel {
 
 
     public void addPlane(double x, double y, double z){
-        planes.add(new plane(x,y,z));
+        planes.add(new Plane(x,y,z));
     }
 
     public void addPlane(String string, double my_coordinate1, double my_coordinate2, double my_height){
-        planes.add(new plane(string, my_coordinate1, my_coordinate2, my_height));
+        planes.add(new Plane(string, my_coordinate1, my_coordinate2, my_height));
     }
 
     public void check(int xy_angle, int xz_angle, int zy_angle){
         int amount = amount();
         for(int i = 0; i < amount; i++){
-            planes.get(i).updatePosition();
-            planes.get(i).turnSystem(xy_angle, xz_angle, zy_angle);
-            planes.get(i).getOnScreen();
+//            updatePosition(planes.get(i));
+            turnSystem(planes.get(i), xy_angle, xz_angle, zy_angle);
+            getOnScreen(planes.get(i));
         }
     }
 
     public double percentX(int i){
-        return planes.get(i).percent_x;
+        return planes.get(i).getX_percent();
     }
     public double percentY(int i){
-        return planes.get(i).percent_y;
+        return planes.get(i).getY_percent();
     }
     public boolean isOnScreen(int i){
-        return planes.get(i).isOnScreen;
+        return planes.get(i).isOnScreen();
     }
     public int amount(){
         return planes.size();
     }
 
-    public double distance(int i){
-        return planes.get(i).distance();
+
+
+
+    public void updatePosition(Plane plane){
+
+        double move = plane.getSpeed() * (unixtime() - plane.getTimeGettingInfo());
+
+        double move_x = Math.cos(Math.toRadians(plane.getAngle())) * move;
+        plane.setX(plane.getX() + move_x);
+
+        double move_y = Math.sin(Math.toRadians(plane.getAngle())) * move;
+        plane.setX(plane.getY() + move_y);
     }
 
-    public String getString(int i){
-        return planes.get(i).getString();
-    }
-
-    public String model(int i){
-        return planes.get(i).model;
-    }
-
-    public String airoport_from(int i){
-        return planes.get(i).airoport_from;
-    }
-
-    public String airoport_to(int i){
-        return planes.get(i).airoport_to;
-    }
-
-    public String company(int i){
-        return planes.get(i).company;
+    private int unixtime(){
+        Date now = new Date();
+        Long longTime = new Long(now.getTime()/1000);
+        return longTime.intValue();
     }
 
 
 
 
+    private void getOnScreen(Plane plane){
+
+        double a, b, x_min, x_max, y_min, y_max;
+        
+        double x = plane.getX(), y = plane.getY(), z = plane.getZ();
+
+        int percent_x = 0, percent_y = 0;
+        boolean isOnScreen;
 
 
-    private class plane{
-
-        private double x, y, z;
-        private double x_absolute, y_absolute, z_absolute;
-
-        private boolean isOnScreen;
-        private double percent_x, percent_y;
-
-        public double coordinate1, coordinate2;
-        public int angle, height, speed, time;
-        public String model, airoport_from, airoport_to, company;
-
-        public void parse(String string){
-            String data[] = string.split(" ");
-            coordinate1 = Double.parseDouble(data[2]);
-            coordinate2 = Double.parseDouble(data[3]);
-            angle = Integer.parseInt(data[4]);
-            height = Integer.parseInt(data[5]);
-            speed = Integer.parseInt(data[6]);
-            model = data[9];
-            airoport_from = data[12];
-            airoport_to = data[13];
-            company = data[19];
-        }
-
-        plane(double x, double y, double z){
-            this.x_absolute = x; this.y_absolute = y; this.z_absolute = z;
-        }
-
-        plane(String string, double my_coordinate1, double my_coordinate2, double my_height){
-            parse(string);
-            z_absolute = height - my_height;
-            x_absolute = coordinate1 - my_coordinate1;
-            x_absolute *= 111000;
-            y_absolute = coordinate2 - my_coordinate2;
-            y_absolute *= 111000;
-        }
-
-
-        public double distance(){
-            return Math.sqrt(Math.pow(x_absolute, 2) + Math.pow(y_absolute, 2) + Math.pow(z_absolute, 2));
-        }
-
-
-        public void updatePosition(){
-
-            double distance = speed * (unixtime() - time);
-            x_absolute += Math.cos(Math.toRadians(angle)) * distance;
-            y_absolute += Math.sin(Math.toRadians(angle)) * distance;
-        }
-
-        private int unixtime(){
-            Date now = new Date();
-            Long longTime = new Long(now.getTime()/1000);
-            return longTime.intValue();
-        }
-
-
-
-
-        private void getOnScreen(){
-
-            double a, b, x_min, x_max, y_min, y_max;
-
-            if(z <= 0){
-                isOnScreen = false;
-                return;
-            }
-
+        if(z <= 0) isOnScreen = false;
+        else{
             a = 2 * z * Math.tan(Math.toRadians(camera_x_angle / 2));
             b = 2 * z * Math.tan(Math.toRadians(camera_y_angle / 2));
 
@@ -159,65 +96,64 @@ public class MathModel {
 
             if(x_min <= x && x <= x_max && y_min <= y && y <= y_max){
                 isOnScreen = true;
-                percent_x = (x - x_min) / a;
-                percent_y = (y - y_min) / b;
+                percent_x = (int) ((x - x_min) / a);
+                percent_y = (int) ((y - y_min) / b);
             }
             else{
                 isOnScreen = false;
             }
         }
 
-        public double percentX(){
-            return percent_x;
-        }
-        public double percentY(){
-            return percent_y;
-        }
-        public boolean isOnScreen(){
-            return isOnScreen;
-        }
+        plane.setX_percent(percent_x);
+        plane.setY_percent(percent_y);
+        plane.setOnScreen(isOnScreen);
 
-        public void turnSystem(int xy_angle, int xz_angle, int zy_angle){
-            xy_angle *= (-1);
-            xz_angle *= (-1);
-            zy_angle *= (-1);
+    }
 
-            double xy_angle_radian, xz_angle_radian, zy_angle_radian;
+    public void turnSystem(Plane plane, int xy_angle, int xz_angle, int zy_angle){
+
+        double x, y, z;
+
+        xy_angle *= (-1);
+        xz_angle *= (-1);
+        zy_angle *= (-1);
+
+        double xy_angle_radian, xz_angle_radian, zy_angle_radian;
 
 
-            xy_angle_radian = (double) xy_angle / 180 * Math.PI;
-            xz_angle_radian = (double) xz_angle / 180 * Math.PI;
-            zy_angle_radian = (double) zy_angle / 180 * Math.PI;
+        xy_angle_radian = (double) xy_angle / 180 * Math.PI;
+        xz_angle_radian = (double) xz_angle / 180 * Math.PI;
+        zy_angle_radian = (double) zy_angle / 180 * Math.PI;
 
 //            xz_angle_radian += Math.PI;
 
 
-            // turn around X
-            double[][] x_matrix =  new double[][]{
-                    {1, 0, 0},
-                    {0, Math.cos(zy_angle_radian), (-1) * Math.sin(zy_angle_radian)},
-                    {0, Math.sin(zy_angle_radian), Math.cos(zy_angle_radian)}
-            };
+        // turn around X
+        double[][] x_matrix =  new double[][]{
+                {1, 0, 0},
+                {0, Math.cos(zy_angle_radian), (-1) * Math.sin(zy_angle_radian)},
+                {0, Math.sin(zy_angle_radian), Math.cos(zy_angle_radian)}
+        };
 
-            // turn around Y
-            double[][] y_matrix =  new double[][]{
-                    {Math.cos(xz_angle_radian), 0, Math.sin(xz_angle_radian)},
-                    {0, 1, 0},
-                    {(-1) * Math.sin(xz_angle_radian), 0, Math.cos(xz_angle_radian)}
-            };
+        // turn around Y
+        double[][] y_matrix =  new double[][]{
+                {Math.cos(xz_angle_radian), 0, Math.sin(xz_angle_radian)},
+                {0, 1, 0},
+                {(-1) * Math.sin(xz_angle_radian), 0, Math.cos(xz_angle_radian)}
+        };
 
-            // turn around Z
-            double[][] z_matrix =  new double[][]{
-                    {Math.cos(xy_angle_radian), (-1) * Math.sin(xy_angle_radian), 0},
-                    {Math.sin(xy_angle_radian), Math.cos(xy_angle_radian), 0},
-                    {0, 0, 1}
-            };
+        // turn around Z
+        double[][] z_matrix =  new double[][]{
+                {Math.cos(xy_angle_radian), (-1) * Math.sin(xy_angle_radian), 0},
+                {Math.sin(xy_angle_radian), Math.cos(xy_angle_radian), 0},
+                {0, 0, 1}
+        };
 
-            double[][] main_matrix = new double[][]{
-                    {x_absolute},
-                    {y_absolute},
-                    {z_absolute}
-            };
+        double[][] main_matrix = new double[][]{
+                {plane.getX()},
+                {plane.getY()},
+                {plane.getZ()}
+        };
 
 //            double distance = distance();
 //            // turn around X
@@ -230,9 +166,9 @@ public class MathModel {
 
 
 
-            main_matrix = matrix_multiplication(x_matrix, main_matrix);
-            main_matrix = matrix_multiplication(y_matrix, main_matrix);
-            main_matrix = matrix_multiplication(z_matrix, main_matrix);
+        main_matrix = matrix_multiplication(x_matrix, main_matrix);
+        main_matrix = matrix_multiplication(y_matrix, main_matrix);
+        main_matrix = matrix_multiplication(z_matrix, main_matrix);
 
 //            main_matrix = matrix_multiplication_second(x_matrix, main_matrix);
 //            main_matrix = matrix_multiplication_second(y_matrix, main_matrix);
@@ -243,9 +179,9 @@ public class MathModel {
 //            result = matrix_multiplication(result, z_matrix);
 //            main_matrix = matrix_multiplication(result, main_matrix);
 
-            x = Math.round(main_matrix[0][0]);
-            y = Math.round(main_matrix[1][0]);
-            z = Math.round(main_matrix[2][0]);
+        x = Math.round(main_matrix[0][0]);
+        y = Math.round(main_matrix[1][0]);
+        z = Math.round(main_matrix[2][0]);
 
 
 
@@ -253,50 +189,56 @@ public class MathModel {
 //            y =  (double)((int) (x_matrix[1][2] * 100)) / 100;
 //            z =  (double)((int) (x_matrix[2][1] * 100)) / 100;
 
-        }
+
+        plane.setX(x);
+        plane.setY(y);
+        plane.setZ(z);
+    }
 
 
-        public String getString(){
-
-            String x_string, y_string, z_string;
-
-            x_string = String.valueOf(x);
-            y_string = String.valueOf(y);
-            z_string = String.valueOf(z);
-
-            return x_string + " " + y_string + " " + z_string;
-        }
-
-
-        private double[][] matrix_multiplication(double[][] first, double second[][]) {
+//    public String getString(){
+//
+//        String x_string, y_string, z_string;
+//
+//        x_string = String.valueOf(x);
+//        y_string = String.valueOf(y);
+//        z_string = String.valueOf(z);
+//
+//        return x_string + " " + y_string + " " + z_string;
+//    }
 
 
-            int m = first.length;
-            int n = second[0].length;
-            int o = second.length;
-            double[][] result = new double[m][n];
+    private double[][] matrix_multiplication(double[][] first, double second[][]) {
 
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    for (int k = 0; k < o; k++) {
-                        result[i][j] += first[i][k] * second[k][j];
-                    }
+
+        int m = first.length;
+        int n = second[0].length;
+        int o = second.length;
+        double[][] result = new double[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < o; k++) {
+                    result[i][j] += first[i][k] * second[k][j];
                 }
             }
-
-            return result;
         }
 
-        private double[][] matrix_multiplication_second(double[][] first, double second[][]) {
-
-            double[][] result = new double[3][1];
-            result[0][0] = first[0][0] * second[0][0] + first[0][1] * second[1][0] + first[0][2] * second[2][0];
-            result[1][0] = first[1][0] * second[0][0] + first[1][1] * second[1][0] + first[1][2] * second[2][0];
-            result[2][0] = first[2][0] * second[0][0] + first[2][1] * second[1][0] + first[2][2] * second[2][0];
-
-            return result;
-        }
+        return result;
     }
+
+    private double[][] matrix_multiplication_second(double[][] first, double second[][]) {
+
+        double[][] result = new double[3][1];
+        result[0][0] = first[0][0] * second[0][0] + first[0][1] * second[1][0] + first[0][2] * second[2][0];
+        result[1][0] = first[1][0] * second[0][0] + first[1][1] * second[1][0] + first[1][2] * second[2][0];
+        result[2][0] = first[2][0] * second[0][0] + first[2][1] * second[1][0] + first[2][2] * second[2][0];
+
+        return result;
+    }
+
+
+
 
 }
 
