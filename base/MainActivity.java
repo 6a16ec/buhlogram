@@ -1,109 +1,148 @@
-package com.example.user.myapplication;
-
+package com.example.user.lapin;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
-import java.io.IOException;
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
-    private SensorManager sensorManager; //менеджер сенсоров
+import java.util.ArrayList;
 
 
+public class MainActivity extends Activity implements SensorEventListener {
+
+    Coordinate coordinate = null;
+
+
+    Sensors sensors = new Sensors();
+    private SensorManager sensorManager;
+
+
+    FlyInfo flyinfo = null;
+
+
+    //Потоки
+    Thread a;
+
+
+    LocationInfo locationInfo;
 
     MathModel model = new MathModel();
-    //model.addPlane(I(0), (double)0, (double)100);
-    Sensors sensors = new Sensors();
 
-    TCP tcp = new TCP();
-
-
-
-    public MainActivity() {
-    }
-
+    Preview mPreview;
+    DrawOnTop mDraw;
+    /** Called when the activity is first created. */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        mPreview = new Preview(this);
+        mDraw = new DrawOnTop(this);
+
+        setContentView(mPreview);
+        addContentView(mDraw, new LayoutParams
+                (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+
 
 
         model.addPlane("# # 0 0 90 100 300 # # A320 # # MSK NN # # # # # LOL", 0 , 0 , 0 );
 
 
-        setContentView(R.layout.activity_main);
+
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI );
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_UI );
+
+        //threadStart();
+        locationInfo = new LocationInfo(this);
+        a = new Thread(){
+            @Override
+            public void run(){
+                coordinate = locationInfo.getResult();
+            }
+        };
+
+        a.start();
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        sensorManager.unregisterListener(this);
+    }
+
 
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        sensors.checkSensors(event);//!!
+        sensors.checkSensors(event);
 
         if(sensors.haveNewInfo()){
 
-//            try {
-//                tcp.write("1223");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-            TextView text;text = (TextView) findViewById(R.id.text);
-            String output = model.getString(0);
-            output += '\n' + sensors.getString();
-            output += " ==== " + model.distance(0) + "\n   ";
-            output += String.valueOf(model.isOnScreen(0)) + " " + String.valueOf(model.percentX(0)) + " " + model.percentY(0);
-
-            String tcp_text = "";
-//            try {
-//                tcp_text = tcp.read();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-            output += "\n" + tcp_text;
-
-            text.setText(output);
-
-            model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY()); //!!
-
-            /*
-            model.isOnScreen();
-            model.percentX();
-            model.percentY();
-            */
-
+            model.check(sensors.getXY(), sensors.getXZ(), sensors.getZY());
+            mDraw.planes = new ArrayList<Plane>();
+            for(int i = 0; i < model.amount(); i++){
+                if(model.isOnScreen(i))
+                    mDraw.planes.add(model.plane(i));
+            }
+            mDraw.invalidate();
         }
 
 
 
     }
 
-
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         //используется для получения уведомлений от SensorManager при изменении значений датчика
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI );
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_UI );
+
+
+
+    private FlyInfo getFlyInformation(){
+        return null;
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
-    }
+    CountDownTimer flyInfoTimer = new CountDownTimer(Integer.MAX_VALUE, 10000){
+
+        @Override
+        public void onTick(long l) {
+            flyinfo = getFlyInformation();
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
+    };
+
 
 
 }
-
