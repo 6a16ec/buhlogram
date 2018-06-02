@@ -8,7 +8,7 @@ public class Plane{
     private int angle, height, speed, time;
     private String model, airport_from, airport_to, company;
 
-    private int x_percent, y_percent;
+    private double x_percent, y_percent;
     private boolean onScreen = false;
 
 
@@ -118,11 +118,11 @@ public class Plane{
         this.onScreen = onScreen;
     }
 
-    public int getX_percent() {
+    public double getX_percent() {
         return x_percent;
     }
 
-    public int getY_percent() {
+    public double getY_percent() {
         return y_percent;
     }
 
