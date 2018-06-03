@@ -1,5 +1,7 @@
 package com.example.user.lapin;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,9 +34,14 @@ public class MathModel {
     public void check(int xy_angle, int xz_angle, int zy_angle){
         int amount = amount();
         for(int i = 0; i < amount; i++){
-//            updatePosition(planes.get(i));
+            updatePosition(planes.get(i));
+            Log.e("gfmerjklgnjkerngbbf ", String.valueOf(planes.get(i).getX()) + " " + String.valueOf(planes.get(i).getY()) + " " + String.valueOf(planes.get(i).getZ()));
             turnSystem(planes.get(i), xy_angle, xz_angle, zy_angle);
+            Log.e("gfmerjklgnjkerngdfb ", String.valueOf(planes.get(i).getX()) + " " + String.valueOf(planes.get(i).getY()) + " " + String.valueOf(planes.get(i).getZ()));
             getOnScreen(planes.get(i));
+//            planes.get(i).setOnScreen(true);
+//            planes.get(i).setX_percent(0.5);
+//            planes.get(i).setY_percent(0.5);
         }
     }
 
@@ -60,13 +67,14 @@ public class MathModel {
 
     public void updatePosition(Plane plane){
 
-        double move = plane.getSpeed() * (unixtime() - plane.getTimeGettingInfo());
-
-        double move_x = Math.cos(Math.toRadians(plane.getAngle())) * move;
-        plane.setX(plane.getX() + move_x);
-
-        double move_y = Math.sin(Math.toRadians(plane.getAngle())) * move;
-        plane.setX(plane.getY() + move_y);
+        plane.setDefault();
+//        double move = plane.getSpeed() * (unixtime() - plane.getTimeGettingInfo());
+//
+//        double move_x = Math.cos(Math.toRadians(plane.getAngle())) * move;
+//        plane.setX(plane.getX() + move_x);
+//
+//        double move_y = Math.sin(Math.toRadians(plane.getAngle())) * move;
+//        plane.setX(plane.getY() + move_y);
     }
 
     private int unixtime(){
