@@ -1,7 +1,10 @@
 package com.example.user.lapin;
 
+import android.util.Log;
+
 public class Plane{
 
+    private double x_start, y_start, z_start;
     private double x, y, z;
 
     private double coordinate1, coordinate2;
@@ -24,8 +27,13 @@ public class Plane{
         x *= 111000;
         y = coordinate2 - my_coordinate2;
         y *= 111000;
+
+        x_start = x; y_start = y; z_start = z;
     }
 
+    public void setDefault(){
+        x = x_start; y = y_start; z = z_start;
+    }
 
 
     private void parse(String string){
