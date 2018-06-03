@@ -57,7 +57,6 @@ public class MathModel {
     public int amount(){
         return planes.size();
     }
-
     public Plane plane(int i){
         return planes.get(i);
     }
@@ -126,32 +125,35 @@ public class MathModel {
 
         double x, y, z;
 
-        xy_angle *= (-1);
-        xz_angle *= (-1);
-        zy_angle *= (-1);
+//        xy_angle *= (-1);
+//        xz_angle *= (-1);
+//        zy_angle *= (-1);
+//        xy_angle = 90 - xy_angle;
+//
+//        double xy_angle_radian, xz_angle_radian, zy_angle_radian;
 
-        double xy_angle_radian, xz_angle_radian, zy_angle_radian;
 
-
-        xy_angle_radian = (double) xy_angle / 180 * Math.PI;
-        xz_angle_radian = (double) xz_angle / 180 * Math.PI;
-        zy_angle_radian = (double) zy_angle / 180 * Math.PI;
+        double xy_angle_radian = Math.toRadians(xy_angle);
+        double xz_angle_radian = Math.toRadians(xz_angle);
+        double zy_angle_radian = Math.toRadians(zy_angle);
 
 //            xz_angle_radian += Math.PI;
 
 
+        // X and Y are changed because of left-hand coordinate system
+        
         // turn around X
         double[][] x_matrix =  new double[][]{
-                {1, 0, 0},
-                {0, Math.cos(zy_angle_radian), (-1) * Math.sin(zy_angle_radian)},
-                {0, Math.sin(zy_angle_radian), Math.cos(zy_angle_radian)}
+                {Math.cos(zy_angle_radian), 0, Math.sin(zy_angle_radian)},
+                {0, 1, 0},
+                {(-1) * Math.sin(zy_angle_radian), 0, Math.cos(zy_angle_radian)}
         };
 
         // turn around Y
         double[][] y_matrix =  new double[][]{
-                {Math.cos(xz_angle_radian), 0, Math.sin(xz_angle_radian)},
-                {0, 1, 0},
-                {(-1) * Math.sin(xz_angle_radian), 0, Math.cos(xz_angle_radian)}
+                {1, 0, 0},
+                {0, Math.cos(xz_angle_radian), (-1) * Math.sin(xz_angle_radian)},
+                {0, Math.sin(xz_angle_radian), Math.cos(xz_angle_radian)}
         };
 
         // turn around Z
@@ -164,8 +166,12 @@ public class MathModel {
         double[][] main_matrix = new double[][]{
                 {plane.getX()},
                 {plane.getY()},
-                {plane.getZ()}
+                {plane.getZ() * (-1)}
         };
+
+        double[][] result_matrix;
+
+
 
 //            double distance = distance();
 //            // turn around X
@@ -177,10 +183,23 @@ public class MathModel {
 //            y = (int) (distance * Math.cos(angle));
 
 
+        result_matrix = matrix_multiplication(x_matrix, y_matrix);
+        result_matrix = matrix_multiplication(result_matrix, z_matrix);
+//        result_matrix = matrix_multiplication(y_matrix, x_matrix);
 
-        main_matrix = matrix_multiplication(x_matrix, main_matrix);
-        main_matrix = matrix_multiplication(y_matrix, main_matrix);
-        main_matrix = matrix_multiplication(z_matrix, main_matrix);
+        main_matrix = matrix_multiplication(result_matrix, main_matrix);
+
+
+        //turn Z
+
+
+
+
+
+
+//        main_matrix = matrix_multiplication(x_matrix, main_matrix);
+//        main_matrix = matrix_multiplication(y_matrix, main_matrix);
+//        main_matrix = matrix_multiplication(z_matrix, main_matrix);
 
 //            main_matrix = matrix_multiplication_second(x_matrix, main_matrix);
 //            main_matrix = matrix_multiplication_second(y_matrix, main_matrix);
@@ -206,6 +225,8 @@ public class MathModel {
         plane.setY(y);
         plane.setZ(z);
     }
+
+
 
 
 //    public String getString(){
