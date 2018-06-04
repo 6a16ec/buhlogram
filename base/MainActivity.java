@@ -1,17 +1,15 @@
 package com.example.user.lapin;
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Bundle;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -19,11 +17,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+    Sensors sensors = new Sensors();
+    GPS gps = new GPS();
+
+
     Coordinate coordinate = null;
 
 
-    Sensors sensors = new Sensors();
-    private SensorManager sensorManager;
+
+
 
 
     FlyInfo flyinfo = null;
@@ -44,6 +46,12 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sensors.onCreate(this);
+        gps.onCreate(this);
+
+
+
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -57,11 +65,10 @@ public class MainActivity extends Activity implements SensorEventListener {
                 (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
 
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 
 
 
-        model.addPlane("# # 0 0 90 100 300 # # A320 # # MSK NN # # # # # LOL", 0 , 0 , 0 );
+        model.addPlane("# # 0 0 0 100 300 # # A320 # # MSK NN # # # # # LOL", 0 , 0 , 0 );
 
 
 
@@ -72,8 +79,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onResume() {
         super.onResume();
 
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI );
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_UI );
+        sensors.onResume(this);
+        gps.onResume();
+
 
         //threadStart();
         locationInfo = new LocationInfo(this);
@@ -93,12 +101,17 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
 
-        sensorManager.unregisterListener(this);
+        sensors.onPause(this);
+        gps.onPause();
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
+
+        if(gps.isNewInfo())
+//        Log.e("njvgkjkfvbv vbndfjvnfj", String.valueOf(gps.getLatitude()) +  " " + String.valueOf(gps.getLongitude() +  " " + String.valueOf(gps.getAltitude())));
 
         sensors.checkSensors(event);
 
@@ -111,10 +124,9 @@ public class MainActivity extends Activity implements SensorEventListener {
                     mDraw.planes.add(model.plane(i));
             }
             mDraw.invalidate();
+
+//            Log.e("0", String.valueOf(sensors.getXY()) + " " + String.valueOf(sensors.getXZ()) + " " + String.valueOf(sensors.getZY()));
         }
-
-
-
     }
 
     @Override
