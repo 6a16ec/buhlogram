@@ -1,5 +1,7 @@
 package com.example.user.lapin;
 
+package com.example.user.finalbeta;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,8 +42,9 @@ public class DrawOnTop extends View {
 
 
         //canvas.drawText(stroka,10,10,paint);
-        u.draw(canvas);
+
         super.onDraw(canvas);
+        u.draw(canvas);
     }
 
     @Override
@@ -68,16 +71,17 @@ public class DrawOnTop extends View {
         protected Bitmap foninfo;
 
         UsualScreen(){
-            plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane);
-            plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
-            foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
-            foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
+        plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane11111);
+        plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
+        foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
+        foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
         }
 
         void performClick(float xScreen, float yScreen) {
             for(int i=0;i<planes.size();i++)
                 if((planes.get(i).getX_percent()*getWidth()- plane.getWidth()/2)<xScreen && xScreen < (planes.get(i).getX_percent()*getWidth() + plane.getWidth()/2) && (planes.get(i).getY_percent()*getHeight()- plane.getHeight()/2)<yScreen && yScreen <(planes.get(i).getY_percent()*getHeight() + plane.getHeight()/2)){
-                    u = new PlaneInfo(i);
+                u = new PlaneInfo(planes.get(i));
+                invalidate();
                 }
         }
 
@@ -98,12 +102,11 @@ public class DrawOnTop extends View {
     }
 
     class PlaneInfo extends UsualScreen{
-        int i;
+        Plane plane;
 
-
-        PlaneInfo(int i){
+        PlaneInfo(Plane plane){
             super();
-            this.i = i;
+            this.plane = plane;
         }
 
         @Override
@@ -133,46 +136,32 @@ public class DrawOnTop extends View {
             int xPos = (width);
             int yPos = (int) ((height) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
 
-            canvas.drawText("company: "+planes.get(i).getCompany(), xPos, yPos, textPaint);
+            canvas.drawText("company: "+plane.getCompany(), xPos, yPos, textPaint);
             yPos+=50;
-            canvas.drawText("airport from: "+planes.get(i).getAirport_from(), xPos, yPos, textPaint);
+            canvas.drawText("airport from: "+plane.getAirport_from(), xPos, yPos, textPaint);
             yPos+=50;
-            canvas.drawText("airport to: "+planes.get(i).getAirport_to(), xPos, yPos, textPaint);
+            canvas.drawText("airport to: "+plane.getAirport_to(), xPos, yPos, textPaint);
             yPos+=50;
-            canvas.drawText("model: "+planes.get(i).getModel(), xPos, yPos, textPaint);
+            canvas.drawText("model: "+plane.getModel(), xPos, yPos, textPaint);
             yPos+=50;
-            canvas.drawText("speed: "+ planes.get(i).getSpeed(),xPos,yPos,textPaint);
+            canvas.drawText("speed: "+ plane.getSpeed(),xPos,yPos,textPaint);
             yPos+=50;
-            canvas.drawText("height: "+ planes.get(i).getAltitude(),xPos,yPos,textPaint);
+            canvas.drawText("height: "+ plane.getHeight(),xPos,yPos,textPaint);
             yPos+=50;
-            canvas.drawText("distance: "+ planes.get(i).getDistance(),xPos,yPos,textPaint);
+            canvas.drawText("distance: "+ plane.getDistance(),xPos,yPos,textPaint);
         }
 
     }
 
 
 
-}
+    class DownloadAnimation{
+        int count = 0;
+        DownloadAnimation(){
 
-/*class Plane{
-    double percentX;
-    double percentY;
-    String model;
-    String airport_from;
-    String airport_to;
-    String company;
-    int speed;
-    double height;
-    double distance;
-    Plane(double percentX,double percentY,String model,String airport_from,String airport_to,String company, int speed, double height,double distance){
-        this.percentX = percentX ;
-        this.percentY = percentY;
-        this.model = model;
-        this.airport_from = airport_from;
-        this.airport_to=airport_to;
-        this.company = company;
-        this.speed = speed;
-        this.height = height;
-        this.distance = distance;
+        }
     }
-}*/
+
+
+
+}
