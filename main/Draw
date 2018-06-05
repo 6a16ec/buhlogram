@@ -1,7 +1,5 @@
 package com.example.user.lapin;
 
-package com.example.user.finalbeta;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.user.lapin.Plane;
 
 import java.util.ArrayList;
 
@@ -71,17 +71,17 @@ public class DrawOnTop extends View {
         protected Bitmap foninfo;
 
         UsualScreen(){
-        plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane11111);
-        plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
-        foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
-        foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
+            plane  = BitmapFactory.decodeResource(getResources(), R.drawable.plane_camera);
+            plane = Bitmap.createScaledBitmap(plane, 111, 57, false);
+            foninfo = BitmapFactory.decodeResource(getResources(), R.drawable.foninfo);
+            foninfo = Bitmap.createScaledBitmap(foninfo,592, 390,false);
         }
 
         void performClick(float xScreen, float yScreen) {
             for(int i=0;i<planes.size();i++)
                 if((planes.get(i).getX_percent()*getWidth()- plane.getWidth()/2)<xScreen && xScreen < (planes.get(i).getX_percent()*getWidth() + plane.getWidth()/2) && (planes.get(i).getY_percent()*getHeight()- plane.getHeight()/2)<yScreen && yScreen <(planes.get(i).getY_percent()*getHeight() + plane.getHeight()/2)){
-                u = new PlaneInfo(planes.get(i));
-                invalidate();
+                    u = new PlaneInfo(planes.get(i));
+                    invalidate();
                 }
         }
 
@@ -146,7 +146,7 @@ public class DrawOnTop extends View {
             yPos+=50;
             canvas.drawText("speed: "+ plane.getSpeed(),xPos,yPos,textPaint);
             yPos+=50;
-            canvas.drawText("height: "+ plane.getAtitude(),xPos,yPos,textPaint);
+            canvas.drawText("altitude: "+ plane.getAltitude(),xPos,yPos,textPaint);
             yPos+=50;
             canvas.drawText("distance: "+ plane.getDistance(),xPos,yPos,textPaint);
         }
