@@ -2,33 +2,44 @@ package com.example.user.lapin;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class Plane{
 
     private double x_start, y_start, z_start;
     private double x, y, z;
 
-    private double latitude, longitude;
-    private int angle, altitude, speed, time;
+    private double latitude, longitude, altitude, speed;
+    private int angle, altitude_ft, speed_km_per_hour,  time;
     private String model, airport_from, airport_to, company;
 
     private double x_percent, y_percent;
     private boolean onScreen = false;
 
 
+    Plane(ArrayList plane, double device_latitude, double device_longitude, double device_altitude){
+        latitude = Double.parseDouble(plane.get(1).toString());
+        longitude = Double.valueOf(plane.get(2).toString());
+        angle = Integer.valueOf(plane.get(3).toString());
+        altitude_ft = Integer.valueOf(plane.get(4).toString());
+        speed_km_per_hour = Integer.valueOf(plane.get(5).toString());
+        model = plane.get(8).toString();
+        airport_from = plane.get(11).toString();
+        airport_to = plane.get(12).toString();
+        company = plane.get(18).toString();
 
-    Plane(double x, double y, double z){
-        this.x = x; this.y = y; this.z = z;
-    }
+        speed = (double) speed_km_per_hour * 1000 / 60 / 60;
+        altitude = (double)altitude_ft * 0.3048;
 
-    Plane(String string, double deviceLatitude, double deviceLongitude, double deviceAltitude){
-        parse(string);
-        z = altitude - deviceAltitude;
-        x = latitude - deviceLatitude;
+        z = altitude - device_altitude;
+        x = latitude - device_latitude;
         x *= 111000;
-        y = longitude - deviceLongitude;
+        y = longitude - device_longitude;
         y *= 111000;
 
         x_start = x; y_start = y; z_start = z;
+
+        Log.e("xyz plane", String.valueOf(x) + " " + String.valueOf(y) + " " + String.valueOf(z));
     }
 
     public void setDefault(){
@@ -36,18 +47,6 @@ public class Plane{
     }
 
 
-    private void parse(String string){
-        String data[] = string.split(" ");
-        latitude = Double.parseDouble(data[2]);
-        longitude = Double.parseDouble(data[3]);
-        angle = Integer.parseInt(data[4]);
-        altitude = Integer.parseInt(data[5]);
-        speed = Integer.parseInt(data[6]);
-        model = data[9];
-        airport_from = data[12];
-        airport_to = data[13];
-        company = data[19];
-    }
 
 
     public double getDistance(){
@@ -78,11 +77,11 @@ public class Plane{
         return angle;
     }
 
-    public int getAltitude() {
+    public double getAltitude() {
         return altitude;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
