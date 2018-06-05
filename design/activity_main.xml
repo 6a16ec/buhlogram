@@ -1,96 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@drawable/plane"
-    android:minHeight="60dp"
-    android:minWidth="300dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:visibility="visible"
+    android:gravity="center_horizontal"
     tools:context="com.example.user.myapplication.MainActivity">
     <!--android:background="@drawable/plane2"-->
 
-    <ImageButton
+
+        <!-- Эта кнопка занимает 30% от всей ширины -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.11"></LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19"
+            ></LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageButton"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.62"
+
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/but"
+            tools:ignore="MissingConstraints"></ImageButton>
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19"
+            ></LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.297"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.224"
+
+            ></LinearLayout>
+
+        <SeekBar
+
+            android:id="@+id/seekBar"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.55"
+            android:layout_gravity="center_vertical"
+
+            android:foregroundGravity="fill_horizontal"
+            android:max="180"
+            android:progress="60"
+            android:progressDrawable="@drawable/red_scrubber_progress"
+            android:scaleType="fitXY"
+            android:scaleWidth="100%"
+            android:thumb="@drawable/red_scrubber_control"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+             />
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.224"
+
+           ></LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+    <!--<ImageButton
         android:id="@+id/imageButton"
 
-        android:layout_width="360dp"
-        android:layout_height="92dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.36"
 
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@drawable/but"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.118"
-        tools:ignore="MissingConstraints"></ImageButton>
+        tools:ignore="MissingConstraints"></ImageButton> -->
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="166dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="80km"
-        android:textColor="#000000"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.845" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.293"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
-    <ImageButton
-        android:id="@+id/imageButton2"
+        <LinearLayout
 
-        android:layout_width="60dp"
-        android:layout_height="56.8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.353"
 
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitXY"
-        android:src="@drawable/but2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="MissingConstraints"></ImageButton>
+            ></LinearLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="320dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        <TextView
+            android:id="@+id/textView"
 
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:foregroundGravity="fill_horizontal"
-        android:max="180"
-        android:progress="60"
-        android:progressDrawable="@drawable/red_scrubber_progress"
-        android:scaleType="fitXY"
-        android:scaleWidth="100%"
-        android:thumb="@drawable/red_scrubber_control"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.572" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.294"
 
-</android.support.constraint.ConstraintLayout>
+            android:gravity="center"
+            android:text="190km"
+            android:textColor="#000000"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.221"
+
+
+            ></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.142"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:gravity="center_vertical">
+
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+
+
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/but2"
+
+                tools:ignore="MissingConstraints" />
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"></LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!-- Эта - 50% -->
+
+    <!-- А эта - 20% -->
+
+
+</LinearLayout>
+
