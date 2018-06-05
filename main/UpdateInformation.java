@@ -1,7 +1,8 @@
-package com.example.user.design;
+package com.example.user.lapin;
 
 import android.os.AsyncTask;
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,8 +14,9 @@ import java.util.ArrayList;
 public class UpdateInformation extends AsyncTask<String, Integer, String> {
 
 
-    private String request;
+    public String request;
     private ArrayList planes = new ArrayList();
+    private boolean newInfo;
 
     public UpdateInformation(double latitude, double longitude, int diapason){
 
@@ -82,6 +84,9 @@ public class UpdateInformation extends AsyncTask<String, Integer, String> {
             }
             jsonReader.endObject();
             in.close();
+
+            if(planes.size() > 0) newInfo = true;
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -96,5 +101,13 @@ public class UpdateInformation extends AsyncTask<String, Integer, String> {
 
     public ArrayList getPlane(int i) {
         return (ArrayList) planes.get(i);
+    }
+
+    public boolean isNewInfo() {
+        return newInfo;
+    }
+
+    public void setNewInfo(boolean newInfo) {
+        this.newInfo = newInfo;
     }
 }
