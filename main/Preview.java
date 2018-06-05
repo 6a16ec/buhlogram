@@ -1,7 +1,8 @@
-package com.example.user.lapin;
+package com.example.user.finalbeta;
 
 import android.app.Activity;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -50,16 +51,21 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         Camera.Parameters parameters = mCamera.getParameters();
+        float a[]={parameters.getVerticalViewAngle(), parameters.getHorizontalViewAngle()};
+        //Log.e("HHHHHHHHHHHHHHHHOI",String.valueOf(a[0])+" "+String.valueOf(a[1]));
+        this.a = a;
         List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
 
-        Camera.Size previewSize = previewSizes.get(0);
-        parameters.setPreviewSize(previewSize.width, previewSize.height);
+
+        //Camera.Size previewSize = previewSizes.get(0);
+        parameters.setPreviewSize(w, h);
         mCamera.setParameters(parameters);
         mCamera.startPreview();
 
     }
 
 
+    float [] a;
 
 
 
