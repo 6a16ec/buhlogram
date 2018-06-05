@@ -1,22 +1,20 @@
 package com.example.user.design;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import android.util.JsonReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.BreakIterator;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 public class UpdateInformation extends AsyncTask<String, Integer, String> {
 
 
-    public String request;
-    public String content = " ";
+    private String request;
+    private ArrayList planes = new ArrayList();
 
     public UpdateInformation(double latitude, double longitude, int diapason){
 
@@ -43,9 +41,46 @@ public class UpdateInformation extends AsyncTask<String, Integer, String> {
             URL requestURL = new URL(request);
             BufferedReader in = null;
             in = new BufferedReader(new InputStreamReader(requestURL.openStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                content += inputLine + "\n";
+
+            JsonReader jsonReader = new JsonReader(in);
+
+            jsonReader.beginObject();
+
+            jsonReader.nextName();
+            int full_count = jsonReader.nextInt();
+            jsonReader.nextName();
+            int version = jsonReader.nextInt();
+
+            while(jsonReader.hasNext()){
+                String id = jsonReader.nextName();
+                jsonReader.beginArray();
+
+                ArrayList plane = new ArrayList();
+
+                while(true){
+                    try{
+                        plane.add(jsonReader.nextString());
+                    }
+                    catch(Exception e1){
+                        try{
+                            plane.add(jsonReader.nextInt());
+                        }
+                        catch (Exception e2){
+                            try {
+                                plane.add(jsonReader.nextDouble());
+                            }
+                            catch(Exception e3){
+                                break;
+                            }
+                        }
+                    }
+                }
+                jsonReader.endArray();
+
+                planes.add(plane);
+
+            }
+            jsonReader.endObject();
             in.close();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -54,9 +89,12 @@ public class UpdateInformation extends AsyncTask<String, Integer, String> {
         }
         return null;
     }
-    
-    
 
+    public int getAmount(){
+        return planes.size();
+    }
 
-
+    public ArrayList getPlane(int i) {
+        return (ArrayList) planes.get(i);
+    }
 }
