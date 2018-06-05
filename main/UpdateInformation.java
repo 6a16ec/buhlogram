@@ -20,22 +20,24 @@ public class UpdateInformation {
         longitudeMIN = longitude - diapason_coordinates;
         longitudeMAX = longitude + diapason_coordinates;
 
-        request = "https://data-live.flightradar24.com/zones/fcgi/feed.js?";
+        request = "https://data-live.flightradar24.com/zones/fcgi/feed.js?bounds=";
         request += String.valueOf(latitudeMAX) + "," + String.valueOf(latitudeMIN) + ",";
         request += String.valueOf(longitudeMIN) + "," + String.valueOf(longitudeMAX);
+//        request += "&faa=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=7200&gliders=1&stats=1";
     }
 
     public void get() throws IOException {
         String information = new String();
 
         URL requestURL = new URL(request);
+        System.out.println(request);
         BufferedReader in = new BufferedReader(new InputStreamReader(requestURL.openStream()));
 
         String inputLine;
         while ((inputLine = in.readLine()) != null)
-            information += inputLine;
+            information += inputLine + "\n";
         in.close();
 
-        Log.e("getgetgetgetget  --", information);
+        System.out.println(information);
     }
 }
