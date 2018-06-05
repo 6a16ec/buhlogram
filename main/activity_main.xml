@@ -143,7 +143,7 @@
             android:layout_weight="0.294"
 
             android:gravity="center"
-            android:text="190km"
+            android:text="80km"
             android:textColor="#000000"
             android:textSize="48sp"
             android:textStyle="bold" />
