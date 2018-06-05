@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         startBut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(((LocationManager)getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER))
-                {}
+                {Intent intent = new Intent(this, ActivityTwo.class);
+startActivity(intent);}
                 else
                     Toast.makeText(getApplicationContext(), "Please, enable GPS, we can't work without it", Toast.LENGTH_SHORT).show();
             }
