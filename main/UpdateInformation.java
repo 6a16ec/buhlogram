@@ -1,13 +1,22 @@
-package com.example.user.lapin;
+package com.example.user.design;
 
-
+import android.os.AsyncTask;
 import android.util.Log;
 
-import java.net.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.BreakIterator;
+import java.util.concurrent.TimeUnit;
 
-public class UpdateInformation {
-    String request;
+public class UpdateInformation extends AsyncTask<String, Integer, String> {
+
+
+    public String request;
+    public String content = " ";
 
     public UpdateInformation(double latitude, double longitude, int diapason){
 
@@ -26,18 +35,28 @@ public class UpdateInformation {
 //        request += "&faa=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=7200&gliders=1&stats=1";
     }
 
-    public void get() throws IOException {
-        String information = new String();
 
-        URL requestURL = new URL(request);
-        System.out.println(request);
-        BufferedReader in = new BufferedReader(new InputStreamReader(requestURL.openStream()));
+    @Override
+    protected String doInBackground(String... strings) {
 
-        String inputLine;
-        while ((inputLine = in.readLine()) != null)
-            information += inputLine + "\n";
-        in.close();
-
-        System.out.println(information);
+        try {
+            URL requestURL = new URL(request);
+            BufferedReader in = null;
+            in = new BufferedReader(new InputStreamReader(requestURL.openStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                content += inputLine + "\n";
+            in.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+    
+    
+
+
+
 }
