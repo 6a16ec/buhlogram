@@ -146,7 +146,7 @@ public class DrawOnTop extends View {
             yPos+=50;
             canvas.drawText("speed: "+ plane.getSpeed(),xPos,yPos,textPaint);
             yPos+=50;
-            canvas.drawText("height: "+ plane.getHeight(),xPos,yPos,textPaint);
+            canvas.drawText("height: "+ plane.getAtitude(),xPos,yPos,textPaint);
             yPos+=50;
             canvas.drawText("distance: "+ plane.getDistance(),xPos,yPos,textPaint);
         }
